@@ -1,28 +1,36 @@
 import slugTools
+import flatConfig
 import time
 import re
 from ftplib import FTP
 
-awUser = 'NJCHE'
-awPass = 'NJCHE'
-awFilename = 'COUW' + slugTools.slugTomorrowString() + '.pdf' 
+awFilename = 'COUW' + slugTools.slugTomorrowString() + '.pdf'
 
-print "filename " + awFilename
+print "Weather filename " + awFilename
 print "\n"
 
 time.sleep(1)
 
-print "filename " + awFilename
-print "\n"
+accu = flatConfig.getConfig('weather.cfg')
+awUser = accu['user']
+awPass = accu['pass']
+awServer = accu['server']
 
-quit()
 
-AW = ftplib.FTP()
+# create an FTP object, connect and log in.
+AW = FTP()
 
-AW.connect('FTP.ACCUWEATHER.COM')
+print "created FTP object\n"
+
+AW.connect(awServer)
 AW.login(awUser,awPass)
 
-AW.retrbinary(awFilename, callback=None)
+
+awGet = 'RETR ' + awFilename
+
+with open(awFilename,'wb') as pdf:
+    AW.retrbinary(awGet, pdf.write)
 
 
-
+AW.quit()
+#quit()

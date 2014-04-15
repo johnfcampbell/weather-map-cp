@@ -1,5 +1,6 @@
 import slugTools
 import flatConfig
+import os
 import time
 import re
 from ftplib import FTP
@@ -8,6 +9,10 @@ awFilename = 'COUW' + slugTools.slugTomorrowString() + '.pdf'
 
 print "Weather filename " + awFilename
 print "\n"
+
+if (os.path.exists(awFilename)):
+    print "found existing file\n"
+    quit()
 
 time.sleep(1)
 
